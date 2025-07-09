@@ -1,5 +1,5 @@
 fpdf2
-barcode
+python-barcode
 qrcode
 flask
 flask_cors

@@ -1,7 +1,7 @@
 from barcode import EAN13, Code128
 from barcode.writer import SVGWriter
 import qrcode
-from fpdf import FPDF, TextStyle, Align
+from fpdf import FPDF, Align
 from fpdf.outline import TableOfContents
 import tempfile
 
