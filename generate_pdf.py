@@ -3,7 +3,7 @@ from barcode.writer import SVGWriter
 import qrcode
 from fpdf import FPDF, Align
 from fpdf.outline import TableOfContents
-import tempfile
+from io import BytesIO
 
 dpi=212
 
@@ -43,17 +43,16 @@ def generate_pdf(settings, cards):
 
         if settings["includeNames"]:
             pdf.cell(text=name, w=(document_width - 1), align=Align.C)
-        # pdf.write_html("<h2>" + card["name"] + "</h2>" ,tag_styles=tag_styles)
 
         if type == "EAN13" or type == "Code128":
-            with tempfile.NamedTemporaryFile(suffix=".svg", delete_on_close=False) as f:
-                if type == "EAN13":
-                    EAN13(code, writer=SVGWriter()).write(f)
-                elif type == "Code128":
-                    Code128(code, writer=SVGWriter()).write(f)
-                f.close()
+            bytes = BytesIO()
+            if type == "EAN13":
+                EAN13(code, writer=SVGWriter()).write(bytes)
+            elif type == "Code128":
+                Code128(code, writer=SVGWriter()).write(bytes)
 
-                pdf.image(f.name, w=ean13_width, h=ean13_height, y=((pdf.h - ean13_height) / 2), x=convert(10))
+            pdf.image(bytes, w=ean13_width, h=ean13_height, y=((pdf.h - ean13_height) / 2), x=convert(10))
+            bytes.close()
             
             pdf.set_y(5)
         elif type == "QRCode":
