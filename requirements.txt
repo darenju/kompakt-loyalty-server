@@ -3,3 +3,5 @@ python-barcode
 qrcode
 flask
 flask_cors
+build
+waitress
