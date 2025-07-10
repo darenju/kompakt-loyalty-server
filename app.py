@@ -1,6 +1,6 @@
 from flask import Flask, make_response, request
 from flask_cors import CORS
-from generate_pdf import generate_pdf
+from api.generate_pdf import generate_pdf
 
 app = Flask(__name__)
 CORS(app)
