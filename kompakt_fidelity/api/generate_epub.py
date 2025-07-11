@@ -35,7 +35,7 @@ def generate_epub(settings, cards):
     if settings["includeNames"]:
       card_chapter.content = '<h2 style="text-align: center;">' + name + "</h2>"
 
-    card_chapter.content += '<img alt="[' + name + ']" src="static/' + filename + '" style="' + image_style + ' width: ' + str(convert(460)) + 'cm;"/>'
+    card_chapter.content += '<img alt="[' + name + ']" src="static/' + filename + '" style="' + image_style + ' width: 4.5cm;"/>'
 
     if settings["includeCodes"]:
       card_chapter.content += '<p style="text-align: center;">' + code + '</p>'
