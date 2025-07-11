@@ -1,6 +1,8 @@
 fpdf2
+ebooklib
 python-barcode
 qrcode
+qrcode[pil]
 flask
 flask_cors
 build
