@@ -25,7 +25,7 @@ def generate_epub(settings, cards):
     code = str(card["code"]).upper()
 
     chapter_file = name + ".xhtml"
-    filename = "tmp/" + str(uuid4()) + ".png"
+    filename = str(uuid4()) + ".png"
     files.append(filename)
 
     card_chapter = epub.EpubHtml(title=name, file_name=chapter_file)
@@ -75,7 +75,7 @@ def generate_epub(settings, cards):
   if settings["includeTOC"]:
     book.add_item(epub.EpubNcx())
 
-  book_filename = "tmp/" + str(uuid4()) + ".pdf"
+  book_filename = str(uuid4()) + ".pdf"
   epub.write_epub(book_filename, book, {})
   files.append(book_filename)
 
