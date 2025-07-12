@@ -1,4 +1,5 @@
 import os
+import base64
 from uuid import uuid4
 from ebooklib import epub
 from ebooklib.utils import create_pagebreak
@@ -7,7 +8,7 @@ from barcode.writer import ImageWriter
 import qrcode
 from .convert import convert
 
-image_style = "display: block; margin-left: auto; margin-right: auto; margin-top: 2cm;"
+image_style = "display: block; margin-left: auto; margin-right: auto;"
 
 def generate_epub(settings, cards):
   book = epub.EpubBook()
@@ -36,15 +37,33 @@ def generate_epub(settings, cards):
     card_chapter.content = ''
 
     if settings["includeNames"]:
-      card_chapter.content = '<h2 style="text-align: center;">' + name + "</h2>"
+      card_chapter.content = '<h2 style="text-align: center; margin-bottom: 0;">' + name + "</h2>"
 
-    card_chapter.content += '<img alt="[' + name + ']" src="static/' + filename + '" style="' + image_style + ' width: 8cm;"/>'
+    if card["image"]:
+      image_content = base64.b64decode(card["image"].split(',')[1])
+      image_filename = str(uuid4()) + ".png"
+      files.append(image_filename)
+
+      with open(image_filename, "wb") as f:
+        f.write(image_content)
+      
+      card_chapter.content += '<img alt="[' + name + ']" src="static/' + image_filename + '" style="' + image_style + '"/>'
+
+      with open(image_filename, "rb") as f:
+        book.add_item(
+          epub.EpubImage(
+            uid=(name + "_image"),
+            file_name="static/" + image_filename,
+            media_type="image/png",
+            content=f.read()
+          )
+        )
+      
+    card_chapter.content += '<img alt="[' + name + ']" src="static/' + filename + '" style="' + image_style + ' margin-top: 1cm; width: 8cm;"/>'
 
     if settings["includeCodes"]:
       card_chapter.content += '<p style="text-align: center;">' + code + '</p>'
 
-    # card_chapter.content += create_pagebreak(str(page))
-  
     page += 1
 
     if type != "QRCode":
