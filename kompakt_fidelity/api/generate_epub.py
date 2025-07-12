@@ -22,7 +22,10 @@ def generate_epub(settings, cards):
   for card in cards:
     name = card["name"]
     type = card["type"]
-    code = str(card["code"]).upper()
+    code = str(card["code"])
+
+    if settings["uppercase"]:
+      code = code.upper()
 
     chapter_file = name + ".xhtml"
     filename = str(uuid4()) + ".png"
@@ -40,7 +43,7 @@ def generate_epub(settings, cards):
     if settings["includeCodes"]:
       card_chapter.content += '<p style="text-align: center;">' + code + '</p>'
 
-    card_chapter.content += create_pagebreak(str(page))
+    # card_chapter.content += create_pagebreak(str(page))
   
     page += 1
 
